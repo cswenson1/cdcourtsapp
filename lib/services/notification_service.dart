@@ -80,4 +80,39 @@ class NotificationService extends ChangeNotifier {
       return false;
     }
   }
+
+  Future<int> getUnreadNotificationCount() async {
+    try {
+      String url = Constant.REST_URl + '/user/notifications/unread/count';
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token');
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'bearer $token',
+      };
+
+      var response = await http.get(
+        url,
+        headers: headers,
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('API Error Occurred');
+      }
+
+      dynamic responseBody = json.decode(response.body);
+
+      if (responseBody['code'] != 200) {
+        throw Exception('API Error Occurred');
+      }
+
+      if (!responseBody['status']) {
+        throw Exception('API Error Occurred');
+      }
+      return responseBody['data']['count'];
+    } on Exception {
+      return 0;
+    }
+  }
 }
