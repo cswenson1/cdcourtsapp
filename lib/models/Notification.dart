@@ -3,7 +3,8 @@ enum NotificationType {
   documentNotification,
   locationNotification,
   profileDetailsNotification,
-  colorUpdated
+  colorUpdated,
+  checkInReminder
 }
 
 class Notifications {
@@ -44,6 +45,9 @@ class Notifications {
       case 'App\\Models\\User':
         notification.notificationType =
             NotificationType.profileDetailsNotification;
+        break;
+      case 'App\\Models\\Checkin':
+        notification.notificationType = NotificationType.checkInReminder;
         break;
       default:
         notification.notificationType = NotificationType.none;

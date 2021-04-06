@@ -6,6 +6,7 @@ import 'package:CDCourtServices/screens/profile.dart';
 import 'package:CDCourtServices/models/Notification.dart';
 import 'package:CDCourtServices/screens/locations_view.dart';
 import 'package:CDCourtServices/services/notification_service.dart';
+import 'package:CDCourtServices/screens/notification_detail_screen.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key key}) : super(key: key);
@@ -51,13 +52,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Icons.notifications,
               size: 25,
             ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => NotificationScreen(),
-                ),
-              );
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: Image.asset('assets/images/dummy-profile.png'),
@@ -132,7 +127,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 );
                                 break;
                               case NotificationType.colorUpdated:
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        NotificationDetailScreen(
+                                      title: notifications[index].title,
+                                      description:
+                                          notifications[index].description,
+                                    ),
+                                  ),
+                                );
                                 break;
+                              case NotificationType.checkInReminder:
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        NotificationDetailScreen(
+                                      title: notifications[index].title,
+                                      description:
+                                          notifications[index].description,
+                                    ),
+                                  ),
+                                );
                             }
                           }
                         },
@@ -140,7 +156,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     ],
                   ),
                 );
-                ;
               },
             ),
     );

@@ -108,7 +108,11 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     final user = new User(name: null, email: null, dob: null, phone: null);
     return !isLoadingInfo
-        ? CircularProgressIndicator()
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          )
         : GetStartedNameView(
             user: user,
           );
