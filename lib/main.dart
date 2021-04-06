@@ -13,6 +13,7 @@ import 'package:CDCourtServices/services/user_service.dart';
 import 'package:CDCourtServices/services/faq_service.dart';
 import 'package:CDCourtServices/services/document_service.dart';
 import 'package:CDCourtServices/push_notifications.dart';
+import 'package:CDCourtServices/services/notification_service.dart';
 
 void main() {
   runApp(MyApp());
@@ -55,7 +56,10 @@ class _MyAppState extends State<MyApp> {
                 ),
                 ChangeNotifierProvider(
                   create: (context) => DocumentService(),
-                )
+                ),
+                ChangeNotifierProvider(
+                  create: (context) => NotificationService(),
+                ),
               ],
               child: GestureDetector(
                 child: MaterialApp(
@@ -104,9 +108,7 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     final user = new User(name: null, email: null, dob: null, phone: null);
     return !isLoadingInfo
-        ? Container(
-            color: Colors.white,
-          )
+        ? CircularProgressIndicator()
         : GetStartedNameView(
             user: user,
           );

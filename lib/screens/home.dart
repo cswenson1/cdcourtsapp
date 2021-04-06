@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:CDCourtServices/screens/profile.dart';
 import 'package:CDCourtServices/services/user_service.dart';
+import 'package:CDCourtServices/screens/notifications_screen.dart';
 // Tabs Imported
 import 'package:CDCourtServices/screens/tabs/check_in.dart';
 import 'package:CDCourtServices/screens/tabs/help.dart';
@@ -78,6 +79,19 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(_tabsList[widget.tabIndex]['title']),
         actions: [
+          IconButton(
+            icon: Icon(
+              Icons.notifications,
+              size: 25,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NotificationScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: Image.asset('assets/images/dummy-profile.png'),
             onPressed: () {
