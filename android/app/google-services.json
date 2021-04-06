@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "564657660625",
+    "project_id": "cd-courts-app",
+    "storage_bucket": "cd-courts-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564657660625:android:de59b888b20503c5615bf0",
+        "android_client_info": {
+          "package_name": "com.tp.cdcourtsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564657660625-r9v1uk07f5hogt0rr692h1ej458ni5pe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDixIkAGS96vBA1upXmxNyou11gZEIYn9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564657660625-r9v1uk07f5hogt0rr692h1ej458ni5pe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
