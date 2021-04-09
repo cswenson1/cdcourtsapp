@@ -251,13 +251,17 @@ class _ProfileState extends State<Profile> {
                           Container(
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             child: TextFormField(
-                              initialValue: _currentUser.color['name'],
-                              key: Key(_currentUser.color['name'].toString()),
+                              initialValue: _currentUser.color == null
+                                  ? 'N/A'
+                                  : _currentUser.color['name'],
+                              key: Key(_currentUser.color == null
+                                  ? 'N/A'
+                                  : _currentUser.color['name'].toString()),
                               focusNode: new AlwaysDisabledFocusNode(),
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Probation Officer',
+                                labelText: 'Color',
                                 contentPadding: EdgeInsets.all(20),
                               ),
                               style: TextStyle(
