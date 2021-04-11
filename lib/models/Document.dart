@@ -4,7 +4,7 @@ class Document {
   String status;
   String downloadLink;
 
-  Document({this.id, this.name, this.status, this.downloadLink});
+  Document({required this.id, required this.name, required this.status, required this.downloadLink});
 
   factory Document.fromJson(Map<String, dynamic> json) {
     return Document(
