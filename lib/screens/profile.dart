@@ -233,9 +233,13 @@ class _ProfileState extends State<Profile> {
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             child: TextFormField(
                               initialValue:
-                                  _currentUser.probationOfficer['name'],
-                              key: Key(_currentUser.probationOfficer['name']
-                                  .toString()),
+                                  _currentUser.probationOfficer == null
+                                      ? 'N/A'
+                                      : _currentUser.probationOfficer['name'],
+                              key: Key(_currentUser.probationOfficer == null
+                                  ? 'N/A'
+                                  : _currentUser.probationOfficer['name']
+                                      .toString()),
                               focusNode: new AlwaysDisabledFocusNode(),
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
@@ -279,17 +283,28 @@ class _ProfileState extends State<Profile> {
                                     size: 40.0,
                                     color: Colors.blue,
                                   ),
-                                  title: Text(_currentUser.office['name']),
-                                  subtitle:
-                                      Text(_currentUser.office['address']),
-                                  trailing: Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: Colors.black,
+                                  title: Text(
+                                    _currentUser.office == null
+                                        ? 'No Office Assigned'
+                                        : _currentUser.office['name'],
                                   ),
+                                  subtitle: Text(
+                                    _currentUser.office == null
+                                        ? ''
+                                        : _currentUser.office['address'],
+                                  ),
+                                  trailing: _currentUser.office != null
+                                      ? Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          color: Colors.black,
+                                        )
+                                      : Text(''),
                                   onTap: () async {
-                                    MapsLauncher.launchQuery(
-                                      _currentUser.office['address'],
-                                    );
+                                    if (_currentUser.office != null) {
+                                      MapsLauncher.launchQuery(
+                                        _currentUser.office['address'],
+                                      );
+                                    }
                                   },
                                 ),
                               ],
