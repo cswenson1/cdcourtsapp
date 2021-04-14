@@ -59,6 +59,10 @@ class UserService extends ChangeNotifier {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       deviceId = iosInfo.identifierForVendor;
     }
+    print(user.email);
+    print(user.name);
+    print(user.dob);
+    print(user.phone);
 
     if (user.email.isEmpty ||
         user.name.isEmpty ||

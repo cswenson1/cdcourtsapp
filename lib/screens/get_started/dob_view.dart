@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:CDCourtServices/models/User.dart';
 import 'package:CDCourtServices/screens/get_started/phone_view.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class GetStartedDobView extends StatefulWidget {
   final User user;
@@ -18,6 +19,8 @@ class _GetStartedDobViewState extends State<GetStartedDobView> {
   bool _validate = false;
   String _errorMessage = '';
   TextEditingController _dobController = new TextEditingController();
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '####-##-##', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   void dispose() {
@@ -93,6 +96,7 @@ class _GetStartedDobViewState extends State<GetStartedDobView> {
                       ),
                     ),
                     TextField(
+                      inputFormatters: [maskFormatter],
                       controller: _dobController,
                       keyboardType: TextInputType.text,
                       autocorrect: false,

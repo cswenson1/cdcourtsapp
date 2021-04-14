@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:CDCourtServices/models/User.dart';
 import 'package:CDCourtServices/services/user_service.dart';
 import 'package:CDCourtServices/screens/welcome.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class GetStartedPhoneView extends StatefulWidget {
   final User user;
@@ -19,6 +20,8 @@ class _GetStartedPhoneViewState extends State<GetStartedPhoneView> {
   bool _validate = false;
   String _errorMessage = '';
   TextEditingController _phoneController = new TextEditingController();
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '(###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   void dispose() {
@@ -102,7 +105,8 @@ class _GetStartedPhoneViewState extends State<GetStartedPhoneView> {
                     ),
                     TextField(
                       controller: _phoneController,
-                      keyboardType: TextInputType.text,
+                      inputFormatters: [maskFormatter],
+                      keyboardType: TextInputType.number,
                       autocorrect: false,
                       textInputAction: TextInputAction.done,
                       maxLines: 1,
@@ -128,8 +132,10 @@ class _GetStartedPhoneViewState extends State<GetStartedPhoneView> {
                           width: double.infinity,
                           child: RaisedButton(
                             onPressed: () {
-                              widget.user.phone = _phoneController.text;
-                              if (_phoneController.text.isEmpty) {
+                              widget.user.phone =
+                                  maskFormatter.getUnmaskedText();
+                              if (_phoneController.text.isEmpty ||
+                                  maskFormatter.getUnmaskedText().length < 10) {
                                 setState(() {
                                   _validate = true;
                                   _errorMessage =
