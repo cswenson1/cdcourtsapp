@@ -82,7 +82,10 @@ class UserService extends ChangeNotifier {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(queryParams),
     );
-
+    if (response.statusCode != 200) {
+      print(response.body);
+      throw Exception('API Error Occurred');
+    }
     if (response.statusCode == 200) {
       dynamic data = json.decode(response.body);
       var status = data['status'];
@@ -205,5 +208,44 @@ class UserService extends ChangeNotifier {
 
     prefs.setString('token', newToken);
     return newToken;
+  }
+
+  Future<User> updateProfile(Map<String, dynamic> params) async {
+    String url = Constant.REST_URl + '/user/update-profile';
+    print(url);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    print(token);
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'bearer $token',
+    };
+
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: json.encode(params),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('API Error Occurred');
+    }
+
+    dynamic data = json.decode(response.body);
+
+    int code = data['code'];
+    if (code != 200) {
+      print(data);
+      throw Exception('API Error');
+    }
+
+    bool status = data['status'];
+    if (!status) {
+      throw Exception('API Status False');
+    }
+
+    this.currentUser = User.fromJson(data['data']['user']);
+    return this.currentUser;
   }
 }

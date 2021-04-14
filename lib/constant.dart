@@ -1,3 +1,3 @@
 class Constant {
-  static final String REST_URl = 'http://3.7.168.236/api/v1';
+  static final String REST_URl = 'https://api.cdcourtservices.com/api/v1';
 }

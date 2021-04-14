@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
-import 'package:CDCourtServices/screens/home.dart';
 import 'package:CDCourtServices/services/user_service.dart';
 import 'package:CDCourtServices/models/User.dart';
 
@@ -18,6 +17,8 @@ class _ProfileState extends State<Profile> {
   UserService _userService;
   User _currentUser = new User();
   bool _isLoading = true;
+  final _formKey = GlobalKey<FormState>();
+  Map<String, dynamic> params = {};
 
   @override
   void initState() {
@@ -36,54 +37,28 @@ class _ProfileState extends State<Profile> {
     print(_currentUser.name);
   }
 
-  _changeTab(int index) {
-    if (index == 0) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => Home(
-              tabIndex: 0,
-            ),
-          ),
-          (Route<dynamic> route) => false);
-    } else if (index == 1) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => Home(
-              tabIndex: 1,
-            ),
-          ),
-          (Route<dynamic> route) => false);
-    } else if (index == 2) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => Home(
-              tabIndex: 2,
-            ),
-          ),
-          (Route<dynamic> route) => false);
-    } else {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => Home(
-              tabIndex: 3,
-            ),
-          ),
-          (Route<dynamic> route) => false);
-    }
-  }
-
   _enableEditMode() {
-    setState(() {
-      if (_isEditing) {
-        _title = 'Profile';
-        _editButtonText = 'EDIT PROFILE';
-        _isEditing = false;
-      } else {
+    if (_isEditing) {
+      setState(() {
+        _isLoading = true;
+      });
+      this._formKey.currentState.save();
+      _userService.updateProfile(params).then((value) {
+        _currentUser = value;
+        setState(() {
+          _title = 'Profile';
+          _editButtonText = 'EDIT PROFILE';
+          _isEditing = false;
+          _isLoading = false;
+        });
+      });
+    } else {
+      setState(() {
         _title = 'Edit Profile';
         _editButtonText = 'SAVE PROFILE';
         _isEditing = true;
-      }
-    });
+      });
+    }
   }
 
   @override
@@ -98,31 +73,6 @@ class _ProfileState extends State<Profile> {
           ),
         ],
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: 3,
-      //   backgroundColor: Colors.blue,
-      //   type: BottomNavigationBarType.fixed,
-      //   selectedItemColor: Colors.white,
-      //   onTap: _changeTab,
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       icon: new Icon(Icons.event_available),
-      //       title: new Text('Check In'),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: new Icon(Icons.description),
-      //       title: new Text('Help'),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: new Icon(Icons.question_answer),
-      //       title: new Text('FAQ'),
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: new Icon(Icons.settings),
-      //       title: new Text('Settings'),
-      //     ),
-      //   ],
-      // ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
@@ -135,6 +85,7 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Form(
+                      key: _formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -164,9 +115,10 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               initialValue: _currentUser.name,
                               key: Key(_currentUser.name.toString()),
-                              focusNode: _isEditing
-                                  ? new AlwaysEnabledFocusNode()
-                                  : new AlwaysDisabledFocusNode(),
+                              // focusNode: _isEditing
+                              //     ? new AlwaysEnabledFocusNode()
+                              //     : new AlwaysDisabledFocusNode(),
+                              enabled: _isEditing,
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -176,6 +128,9 @@ class _ProfileState extends State<Profile> {
                               style: TextStyle(
                                 fontSize: 20,
                               ),
+                              onSaved: (value) {
+                                this.params['name'] = value;
+                              },
                             ),
                           ),
                           Container(
@@ -183,7 +138,8 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               initialValue: _currentUser.email,
                               key: Key(_currentUser.email.toString()),
-                              focusNode: new AlwaysDisabledFocusNode(),
+                              // focusNode: new AlwaysDisabledFocusNode(),
+                              enabled: false,
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -200,7 +156,8 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               initialValue: _currentUser.dob,
                               key: Key(_currentUser.dob.toString()),
-                              focusNode: new AlwaysDisabledFocusNode(),
+                              enabled: false,
+                              // focusNode: new AlwaysDisabledFocusNode(),
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -210,6 +167,9 @@ class _ProfileState extends State<Profile> {
                               style: TextStyle(
                                 fontSize: 20,
                               ),
+                              onSaved: (value) {
+                                this.params['dob'] = value;
+                              },
                             ),
                           ),
                           Container(
@@ -217,7 +177,8 @@ class _ProfileState extends State<Profile> {
                             child: TextFormField(
                               initialValue: _currentUser.phone,
                               key: Key(_currentUser.phone.toString()),
-                              focusNode: new AlwaysDisabledFocusNode(),
+                              enabled: _isEditing,
+                              // focusNode: new AlwaysDisabledFocusNode(),
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -227,6 +188,9 @@ class _ProfileState extends State<Profile> {
                               style: TextStyle(
                                 fontSize: 20,
                               ),
+                              onSaved: (value) {
+                                this.params['phone'] = value;
+                              },
                             ),
                           ),
                           Container(
@@ -240,7 +204,8 @@ class _ProfileState extends State<Profile> {
                                   ? 'N/A'
                                   : _currentUser.probationOfficer['name']
                                       .toString()),
-                              focusNode: new AlwaysDisabledFocusNode(),
+                              enabled: false,
+                              // focusNode: new AlwaysDisabledFocusNode(),
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -261,7 +226,8 @@ class _ProfileState extends State<Profile> {
                               key: Key(_currentUser.color == null
                                   ? 'N/A'
                                   : _currentUser.color['name'].toString()),
-                              focusNode: new AlwaysDisabledFocusNode(),
+                              // focusNode: new AlwaysDisabledFocusNode(),
+                              enabled: false,
                               enableInteractiveSelection: false,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
